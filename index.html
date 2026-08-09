@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSM-5 Interactivo - Criterios & Diagnóstico Diferencial</title>
+    <meta name="description" content="Manual Diagnóstico y Estadístico de los Trastornos Mentales (DSM-5) - Versión interactiva para psicología">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Decorative background blobs -->
+    <div class="bg-blob bg-blob-1"></div>
+    <div class="bg-blob bg-blob-2"></div>
+
+    <div class="app-container">
+
+        <!-- ======== SIDEBAR ======== -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <div class="brand-icon brand-cat-ears">
+                        <!-- Brain / Psychology icon -->
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 3C9.23 3 6.19 5.95 6 9.66L4.08 12.19C3.84 12.5 4.08 13 4.5 13H6V16C6 17.11 6.89 18 8 18H9V21H16V16.31C18.37 15.19 20 12.8 20 10C20 6.13 16.87 3 13 3ZM11 11.5C11 10.67 11.67 10 12.5 10C13.33 10 14 10.67 14 11.5C11.67 13 11 12.33 11 11.5ZM14 9C13.45 9 13 8.55 13 8C13 7.45 13.45 7 14 7C14.55 7 15 7.45 15 8C15 8.55 14.55 9 14 9Z"/>
+                        </svg>
+                    </div>
+                    <h1>DSM-5 🐾</h1>
+                </div>
+                <p class="subtitle">Manual Diagnóstico & Estadístico</p>
+
+                <div class="filter-pills" id="filterPills">
+                    <button class="pill active" data-filter="all">Todos</button>
+                    <button class="pill" data-filter="disorders">Trastornos</button>
+                    <button class="pill" data-filter="glossary">Glosario</button>
+                    <button class="pill" data-filter="section1">Sección I</button>
+                </div>
+
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="🔍 Buscar por trastorno, código CIE, síntoma..." autocomplete="off">
+                </div>
+
+                <div class="controls">
+                    <span class="count-badge" id="resultsCount">0 resultados</span>
+                    <button id="themeToggle" class="icon-btn" title="Cambiar modo claro / oscuro">
+                        <!-- Sun icon -->
+                        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/>
+                            <line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                        <!-- Moon icon (hidden by default) -->
+                        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar-content">
+                <ul id="tocList" class="toc-list">
+                    <!-- Dynamic items injected by JS -->
+                </ul>
+            </div>
+        </aside>
+
+        <!-- ======== MAIN CONTENT ======== -->
+        <main class="main-content">
+
+            <!-- Welcome State -->
+            <div id="welcomeScreen" class="welcome-screen">
+                <div class="welcome-card glass-panel">
+                    <span class="welcome-emoji">🧠✨</span>
+                    <h2>¡Bienvenida al DSM-5 Interactivo!</h2>
+                    <p>Explora la clasificación completa del manual, sus <strong>criterios diagnósticos</strong>, la sección de <strong>diagnóstico diferencial</strong> para comparar trastornos similares, y el <strong>glosario clínico</strong>.</p>
+                    <div class="welcome-hint">
+                        <span>📚 144 Trastornos Indexados</span>
+                        <span>📖 Glosario Técnico & Cultural</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Viewer State -->
+            <article id="contentViewer" class="content-viewer" style="display:none;">
+                <div class="content-header">
+                    <div class="meta-row">
+                        <span class="content-tag" id="contentTag">Sección II</span>
+                        <span class="code-badge" id="contentCode">CIE-10</span>
+                    </div>
+                    <h2 id="contentTitle">Título</h2>
+                    <div class="chapter-sub" id="contentChapter">Capítulo</div>
+                </div>
+
+                <!-- Tabs Navigation for Disorder -->
+                <div class="view-tabs" id="viewTabs">
+                    <button class="tab-btn active" data-tab="criterios">📋 Criterios Diagnósticos</button>
+                    <button class="tab-btn highlight-tab" data-tab="diferencial">🔄 Diagnóstico Diferencial</button>
+                    <button class="tab-btn" data-tab="caracteristicas">📖 Características & Comorbilidad</button>
+                    <button class="tab-btn" data-tab="especificadores">🏷️ Especificadores</button>
+                </div>
+
+                <!-- Tab Content Containers -->
+                <div class="tab-pane active" id="paneCriterios">
+                    <div class="criteria-container" id="criteriaList"></div>
+                </div>
+
+                <div class="tab-pane" id="paneDiferencial">
+                    <div class="diff-card glass-panel" id="diffContent">
+                        <div class="diff-header">
+                            <span class="diff-icon">⚖️</span>
+                            <h3>Criterios de Diagnóstico Diferencial</h3>
+                        </div>
+                        <p class="diff-subtitle">Utiliza esta sección para diferenciar este trastorno de otras patologías clínicas con sintomatología semejante.</p>
+                        <div class="diff-body" id="diffText"></div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="paneCaracteristicas">
+                    <div class="sections-grid" id="caractGrid"></div>
+                </div>
+
+                <div class="tab-pane" id="paneEspecificadores">
+                    <div class="especif-box" id="especifContent"></div>
+                </div>
+
+                <!-- General Reader (for Glossary and Guide items) -->
+                <div class="general-reader" id="generalReader" style="display:none;">
+                    <div class="content-body" id="generalText"></div>
+                </div>
+
+            </article>
+
+        </main>
+    </div>
+
+    <!-- Cat Companion Summon Button -->
+    <button id="catSummonBtn" class="cat-companion-btn" title="¡Llama a tu gatito estudiante!">
+        🐱 Llamar gatito
+    </button>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+    <script src="cats.js"></script>
+</body>
+</html>
