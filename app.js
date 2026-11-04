@@ -195,13 +195,13 @@ document.addEventListener('DOMContentLoaded', () => {
             renderCriteria(item.criterios || []);
 
             diffText.innerHTML = (item.diagnostico_diferencial && item.diagnostico_diferencial.trim())
-                ? formatParas(item.diagnostico_diferencial)
+                ? formatContent(item.diagnostico_diferencial)
                 : `<p style="color:var(--text-muted)">Ver capítulo <em>${escapeHtml(item.chapter)}</em> para diagnóstico diferencial general.</p>`;
 
             renderGrid(item);
 
             especifContent.innerHTML = (item.especificadores && item.especificadores.trim())
-                ? formatParas(item.especificadores)
+                ? formatContent(item.especificadores)
                 : `<p style="color:var(--text-muted)">Sin especificadores adicionales.</p>`;
 
             document.querySelector('.tab-btn[data-tab="criterios"]').click();
@@ -228,10 +228,14 @@ document.addEventListener('DOMContentLoaded', () => {
             contentTag.textContent = 'Sección I';
             contentCode.style.display = 'none';
             contentChapter.textContent = 'Conceptos Básicos';
-            generalText.innerHTML = formatParas(item.content || item.description);
+            generalText.innerHTML = formatContent(item.content || item.description);
         }
 
         document.querySelector('.main-content').scrollTop = 0;
+        if (window.innerWidth <= 768) {
+            const mainEl = document.querySelector('.main-content');
+            window.scrollTo({ top: mainEl.offsetTop - 10, behavior: 'smooth' });
+        }
     };
 
     const renderCriteria = criterios => {
@@ -263,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (sec.text && sec.text.trim()) {
                 const box = document.createElement('div');
                 box.className = 'sec-box';
-                box.innerHTML = `<h4>${escapeHtml(sec.title)}</h4>${formatParas(sec.text)}`;
+                box.innerHTML = `<h4>${escapeHtml(sec.title)}</h4>${formatContent(sec.text)}`;
                 caractGrid.appendChild(box);
             }
         });
@@ -277,6 +281,32 @@ document.addEventListener('DOMContentLoaded', () => {
             .filter(l => l.trim())
             .map(l => `<p>${escapeHtml(l.trim())}</p>`)
             .join('');
+    };
+
+    // Detects if text is truncated (ends mid-sentence) and wraps with fade
+    const isTruncated = text => {
+        if (!text) return false;
+        const trimmed = text.trim();
+        // If text ends without punctuation, or ends mid-word
+        const lastChar = trimmed.charAt(trimmed.length - 1);
+        const endsClean = ['.', '!', '?', ':', '"', '»', ')'].includes(lastChar);
+        return !endsClean;
+    };
+
+    const formatContent = text => {
+        if (!text) return '';
+        const paras = formatParas(text);
+        if (isTruncated(text)) {
+            return `<div class="content-fade-wrapper">
+                <div class="content-text">${paras}</div>
+                <div class="content-fade-overlay"></div>
+                <div class="content-truncated-note">
+                    <span class="truncated-icon">📄</span>
+                    <span>Extracto del manual — contenido completo disponible en el DSM-5 publicado.</span>
+                </div>
+            </div>`;
+        }
+        return paras;
     };
 
     // ── Búsqueda ──────────────────────────────────────────────

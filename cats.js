@@ -361,18 +361,11 @@
         }
     });
 
-    // ── 5. Botón de convocar ──────────────────────────────
-    const btn = document.getElementById('catSummonBtn');
-    if (btn) btn.addEventListener('click', launchWalkingCat);
+    // ── 5. Botón de convocar (desactivado) ─────────────────
+    // const btn = document.getElementById('catSummonBtn');
+    // if (btn) btn.addEventListener('click', launchWalkingCat);
 
     // ── Init ──────────────────────────────────────────────
-    addSidebarCat();
-    addFloatingCats();
-
-    // Auto-gato cada 45 s
-    setInterval(launchWalkingCat, 45000);
-
-    // Gato de bienvenida después de 2 s
-    setTimeout(launchWalkingCat, 2000);
+    // Cats disabled — only paw click effects remain active
 
 })();

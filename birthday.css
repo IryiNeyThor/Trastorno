@@ -1,0 +1,1022 @@
+/* ========================
+   🎂 BIRTHDAY CELEBRATION
+   Animated Cat Birthday Party
+======================== */
+
+/* ── Float Button ──────────────────────────── */
+.birthday-float-btn {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    background: linear-gradient(135deg, #ff6b9d 0%, #c084fc 50%, #ffd700 100%);
+    color: #fff;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 50px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 6px 28px rgba(255, 107, 157, 0.4), 0 0 20px rgba(192, 132, 252, 0.2);
+    z-index: 1000;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: bdayBtnPulse 2s ease-in-out infinite;
+    overflow: hidden;
+}
+
+.birthday-float-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+    animation: btnShine 3s ease-in-out infinite;
+}
+
+@keyframes btnShine {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+
+.birthday-float-btn:hover {
+    transform: translateY(-4px) scale(1.08);
+    box-shadow: 0 10px 40px rgba(255, 107, 157, 0.5), 0 0 30px rgba(192, 132, 252, 0.3);
+}
+
+@keyframes bdayBtnPulse {
+    0%, 100% { box-shadow: 0 6px 28px rgba(255, 107, 157, 0.4), 0 0 20px rgba(192, 132, 252, 0.2); }
+    50% { box-shadow: 0 6px 36px rgba(255, 107, 157, 0.6), 0 0 40px rgba(192, 132, 252, 0.35); }
+}
+
+/* ── Overlay ───────────────────────────────── */
+.birthday-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s ease;
+}
+
+.birthday-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .birthday-overlay.open {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+/* ── Scene ─────────────────────────────────── */
+.birthday-scene {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: linear-gradient(
+        180deg,
+        #1a0520 0%,
+        #2d1040 15%,
+        #3d1a5a 30%,
+        #2d1040 60%,
+        #1a0520 100%
+    );
+}
+
+[data-theme="light"] .birthday-scene {
+    background: linear-gradient(
+        180deg,
+        #fff0f5 0%,
+        #fce7f3 15%,
+        #fdf2f8 30%,
+        #fce7f3 60%,
+        #fff0f5 100%
+    );
+}
+
+/* ── Close Button ──────────────────────────── */
+.bday-close-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10010;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+[data-theme="light"] .bday-close-btn {
+    background: rgba(230, 96, 154, 0.15);
+    border-color: rgba(230, 96, 154, 0.3);
+    color: #e6609a;
+}
+
+.bday-close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg) scale(1.1);
+}
+
+/* ── Confetti Canvas ───────────────────────── */
+.confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10001;
+}
+
+/* ── Stars Canvas ──────────────────────────── */
+.stars-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10000;
+}
+
+/* ── Balloons ──────────────────────────────── */
+.balloons-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10000;
+    overflow: hidden;
+}
+
+.balloon {
+    position: absolute;
+    bottom: -150px;
+    border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%;
+    animation: balloonFloat linear infinite;
+    opacity: 0.75;
+    filter: blur(0.3px);
+}
+
+.balloon::before {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 8px solid inherit;
+}
+
+.balloon-string {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    width: 0;
+    height: 35px;
+    border-left: 1px dashed rgba(255,255,255,0.3);
+}
+
+@keyframes balloonFloat {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(0.8);
+        opacity: 0;
+    }
+    5% {
+        opacity: 0.7;
+    }
+    50% {
+        transform: translateY(-55vh) rotate(15deg) scale(1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(-120vh) rotate(-10deg) scale(0.9);
+        opacity: 0;
+    }
+}
+
+/* ── Main Content ──────────────────────────── */
+.bday-content {
+    position: relative;
+    z-index: 10002;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+    text-align: center;
+}
+
+/* ── Countdown ─────────────────────────────── */
+.bday-countdown {
+    margin-bottom: 20px;
+}
+
+.countdown-today,
+.countdown-tomorrow,
+.countdown-future {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 24px;
+    border-radius: 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    animation: countdownPulse 2s ease-in-out infinite;
+}
+
+.countdown-today {
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.3), rgba(192, 132, 252, 0.3));
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    color: #ffd700;
+    font-size: 1.2rem;
+}
+
+[data-theme="light"] .countdown-today {
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.15), rgba(192, 132, 252, 0.15));
+    color: #e6609a;
+}
+
+.countdown-tomorrow {
+    background: rgba(255, 215, 0, 0.15);
+    border: 2px solid rgba(255, 215, 0, 0.4);
+    color: #ffd700;
+}
+
+[data-theme="light"] .countdown-tomorrow {
+    background: rgba(230, 96, 154, 0.1);
+    border-color: rgba(230, 96, 154, 0.3);
+    color: #e6609a;
+}
+
+.countdown-future {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.countdown-emoji {
+    font-size: 1.4rem;
+    animation: emojiDance 1s ease-in-out infinite alternate;
+}
+
+@keyframes emojiDance {
+    from { transform: scale(1) rotate(-5deg); }
+    to { transform: scale(1.15) rotate(5deg); }
+}
+
+@keyframes countdownPulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.1); }
+    50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.25); }
+}
+
+/* ── Title ─────────────────────────────────── */
+.bday-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 3.2rem;
+    color: #ffffff;
+    margin-bottom: 8px;
+    text-shadow: 0 0 40px rgba(255, 107, 157, 0.5), 0 0 80px rgba(192, 132, 252, 0.3);
+    animation: titleGlow 3s ease-in-out infinite alternate;
+    line-height: 1.3;
+}
+
+[data-theme="light"] .bday-title {
+    color: #e6609a;
+    text-shadow: 0 0 40px rgba(230, 96, 154, 0.3);
+}
+
+@keyframes titleGlow {
+    from { text-shadow: 0 0 40px rgba(255, 107, 157, 0.5), 0 0 80px rgba(192, 132, 252, 0.3); }
+    to { text-shadow: 0 0 60px rgba(255, 107, 157, 0.7), 0 0 120px rgba(192, 132, 252, 0.5); }
+}
+
+.bday-cake-icon {
+    display: inline-block;
+    animation: cakeJump 1.5s ease-in-out infinite;
+}
+
+.bday-cake-icon:last-child {
+    animation-delay: 0.3s;
+}
+
+@keyframes cakeJump {
+    0%, 100% { transform: translateY(0) scale(1); }
+    30% { transform: translateY(-8px) scale(1.15); }
+    60% { transform: translateY(2px) scale(0.95); }
+}
+
+.bday-subtitle {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+    margin-bottom: 30px;
+    font-family: 'DM Sans', sans-serif;
+}
+
+[data-theme="light"] .bday-subtitle {
+    color: #a06080;
+}
+
+/* ── Cat Stage ─────────────────────────────── */
+.cat-stage {
+    margin: 20px auto;
+    border-radius: 24px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 10px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .cat-stage {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(230, 96, 154, 0.2);
+    box-shadow: 0 20px 60px rgba(230, 96, 154, 0.15);
+}
+
+#catStageCanvas {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+/* ── Audio Section ─────────────────────────── */
+.bday-audio-section {
+    margin: 30px auto;
+    max-width: 480px;
+}
+
+.audio-player-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 28px 32px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .audio-player-card {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(230, 96, 154, 0.2);
+    box-shadow: 0 16px 48px rgba(230, 96, 154, 0.12);
+}
+
+.audio-cat-icon {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+    animation: catSing 1s ease-in-out infinite alternate;
+}
+
+@keyframes catSing {
+    from { transform: scale(1) rotate(-3deg); }
+    to { transform: scale(1.1) rotate(3deg); }
+}
+
+.audio-player-card h3 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.3rem;
+    color: #ffffff;
+    margin-bottom: 6px;
+}
+
+[data-theme="light"] .audio-player-card h3 {
+    color: #e6609a;
+}
+
+.audio-hint {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 16px;
+}
+
+[data-theme="light"] .audio-hint {
+    color: #a06080;
+}
+
+/* Upload area */
+.audio-upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.audio-upload-btn {
+    background: linear-gradient(135deg, #e6609a 0%, #c084fc 100%);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 6px 20px rgba(230, 96, 154, 0.3);
+}
+
+.audio-upload-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(230, 96, 154, 0.45);
+}
+
+.audio-file-name {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-style: italic;
+}
+
+[data-theme="light"] .audio-file-name {
+    color: #a06080;
+}
+
+/* Audio Controls */
+.audio-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] .audio-controls {
+    background: rgba(252, 231, 243, 0.6);
+    border-color: rgba(230, 96, 154, 0.15);
+}
+
+.audio-play-btn {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e6609a 0%, #ff6b9d 100%);
+    border: none;
+    color: #fff;
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(230, 96, 154, 0.4);
+}
+
+.audio-play-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 24px rgba(230, 96, 154, 0.5);
+}
+
+.audio-progress-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.audio-progress-bar {
+    position: relative;
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+    cursor: pointer;
+    overflow: visible;
+}
+
+[data-theme="light"] .audio-progress-bar {
+    background: rgba(230, 96, 154, 0.15);
+}
+
+.audio-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #e6609a, #c084fc, #ffd700);
+    border-radius: 3px;
+    transition: width 0.1s linear;
+    position: relative;
+    z-index: 1;
+}
+
+.audio-progress-thumb {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border: 2px solid #e6609a;
+    border-radius: 50%;
+    z-index: 2;
+    transition: left 0.1s linear;
+    box-shadow: 0 2px 6px rgba(230, 96, 154, 0.3);
+}
+
+.audio-time-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2px;
+}
+
+.audio-time {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'DM Sans', sans-serif;
+}
+
+[data-theme="light"] .audio-time {
+    color: #a06080;
+}
+
+/* ── Show Progress ─────────────────────────── */
+.show-progress {
+    margin: 20px auto;
+    max-width: 480px;
+    text-align: center;
+}
+
+.show-progress-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+[data-theme="light"] .show-progress-bar {
+    background: rgba(230, 96, 154, 0.1);
+}
+
+.show-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #e6609a, #c084fc, #ffd700);
+    border-radius: 2px;
+    transition: width 0.3s linear;
+}
+
+.show-progress-text {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'DM Sans', sans-serif;
+    animation: showTextPulse 2s ease-in-out infinite;
+}
+
+[data-theme="light"] .show-progress-text {
+    color: #a06080;
+}
+
+@keyframes showTextPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+/* Singing Indicator */
+.singing-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 14px;
+    padding: 10px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255, 107, 157, 0.15), rgba(192, 132, 252, 0.15));
+    border: 1px solid rgba(255, 107, 157, 0.2);
+    flex-wrap: wrap;
+}
+
+.singing-indicator span {
+    font-size: 1.3rem;
+    animation: singBounce 0.6s ease-in-out infinite alternate;
+}
+
+.singing-indicator span:nth-child(2) { animation-delay: 0.1s; }
+.singing-indicator span:nth-child(3) { animation-delay: 0.2s; }
+.singing-indicator span:nth-child(4) { animation-delay: 0.3s; }
+.singing-indicator span:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes singBounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-6px); }
+}
+
+.singing-indicator p {
+    width: 100%;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #f48cbf;
+    margin-top: 4px;
+    font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Floating Music Notes ──────────────────── */
+.music-notes-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10003;
+    overflow: hidden;
+}
+
+.floating-music-note {
+    position: absolute;
+    bottom: -40px;
+    color: rgba(255, 215, 0, 0.7);
+    animation: musicNoteFloat linear forwards;
+    pointer-events: none;
+}
+
+@keyframes musicNoteFloat {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(0.5);
+        opacity: 0;
+    }
+    15% {
+        opacity: 0.9;
+        transform: translateY(-15vh) rotate(20deg) scale(1);
+    }
+    100% {
+        transform: translateY(-100vh) rotate(-30deg) scale(0.6);
+        opacity: 0;
+    }
+}
+
+/* ── Birthday Message Card ─────────────────── */
+.bday-message-card {
+    margin-top: 30px;
+    padding: 24px 32px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+[data-theme="light"] .bday-message-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(230, 96, 154, 0.2);
+}
+
+.bday-message-card p {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+    line-height: 1.7;
+    font-family: 'DM Sans', sans-serif;
+}
+
+[data-theme="light"] .bday-message-card p {
+    color: #3d1a2e;
+}
+
+.bday-hearts {
+    margin-top: 10px;
+    font-size: 1.5rem !important;
+    letter-spacing: 6px;
+    animation: heartsGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes heartsGlow {
+    from { filter: brightness(1); }
+    to { filter: brightness(1.3); }
+}
+
+/* ── Mobile Responsive ─────────────────────── */
+@media (max-width: 768px) {
+    .birthday-float-btn {
+        bottom: 80px;
+        left: 16px;
+        padding: 10px 18px;
+        font-size: 0.82rem;
+    }
+
+    .bday-title {
+        font-size: 2rem;
+    }
+
+    .bday-subtitle {
+        font-size: 1rem;
+    }
+
+    .bday-content {
+        padding: 30px 16px 40px;
+    }
+
+    .audio-player-card {
+        padding: 20px 18px;
+    }
+
+    .audio-player-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .countdown-today,
+    .countdown-tomorrow,
+    .countdown-future {
+        flex-wrap: wrap;
+        font-size: 0.88rem;
+        padding: 12px 16px;
+    }
+
+    .cat-stage {
+        padding: 5px;
+    }
+
+    .bday-close-btn {
+        top: 12px;
+        right: 12px;
+        width: 38px;
+        height: 38px;
+    }
+
+    .bday-message-card {
+        padding: 18px 20px;
+    }
+
+    .bday-message-card p {
+        font-size: 0.92rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .bday-title {
+        font-size: 1.6rem;
+    }
+
+    .bday-cake-icon {
+        font-size: 1.3rem;
+    }
+
+    .audio-play-btn {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+        font-size: 1.1rem;
+    }
+}
+
+/* ── BIG CENTERED COUNTDOWN HERO VIEW ─────── */
+.countdown-hero-container {
+    position: relative;
+    z-index: 10002;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+}
+
+.countdown-hero-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    border-radius: 32px;
+    padding: 48px 40px;
+    max-width: 680px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25), 0 0 50px rgba(230, 96, 154, 0.2);
+    animation: heroCardFloat 4s ease-in-out infinite alternate;
+}
+
+[data-theme="light"] .countdown-hero-card {
+    background: rgba(255, 255, 255, 0.88);
+    border-color: rgba(230, 96, 154, 0.3);
+    box-shadow: 0 24px 60px rgba(230, 96, 154, 0.2), 0 0 50px rgba(244, 140, 191, 0.25);
+}
+
+@keyframes heroCardFloat {
+    from { transform: translateY(0); }
+    to { transform: translateY(-8px); }
+}
+
+.countdown-hero-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    background: linear-gradient(135deg, rgba(230, 96, 154, 0.2), rgba(192, 132, 252, 0.2));
+    border: 1px solid var(--accent);
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+.countdown-hero-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2.5rem;
+    color: var(--text-primary);
+    line-height: 1.25;
+    margin-bottom: 12px;
+    text-shadow: 0 2px 20px var(--accent-glow);
+}
+
+.countdown-hero-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 36px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.countdown-hero-subtitle strong {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+/* Digits Display Row */
+.countdown-digits-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 36px;
+}
+
+.countdown-digit-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border: 2px solid rgba(230, 96, 154, 0.35);
+    border-radius: 24px;
+    min-width: 130px;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), inset 0 0 20px rgba(230, 96, 154, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+[data-theme="light"] .countdown-digit-card {
+    background: linear-gradient(180deg, #ffffff 0%, #fff5f8 100%);
+    border-color: rgba(230, 96, 154, 0.25);
+    box-shadow: 0 10px 30px rgba(230, 96, 154, 0.15), inset 0 0 15px rgba(252, 231, 243, 0.5);
+}
+
+.countdown-digit-card:hover {
+    transform: translateY(-4px) scale(1.03);
+    border-color: var(--accent);
+}
+
+.digit-value {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 4.2rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -1px;
+    text-shadow: 0 4px 18px var(--accent-glow);
+}
+
+.digit-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    text-transform: uppercase;
+}
+
+.digit-divider {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: var(--accent);
+    opacity: 0.7;
+    animation: colonBlink 1s ease-in-out infinite;
+    user-select: none;
+}
+
+@keyframes colonBlink {
+    0%, 100% { opacity: 0.9; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.9); }
+}
+
+/* Waiting Cat Scene */
+.countdown-waiting-scene {
+    background: rgba(230, 96, 154, 0.08);
+    border: 1px dashed rgba(230, 96, 154, 0.3);
+    border-radius: 20px;
+    padding: 18px 24px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+}
+
+.waiting-cat-icon {
+    font-size: 2.5rem;
+    animation: catSnooze 2s ease-in-out infinite alternate;
+    flex-shrink: 0;
+}
+
+@keyframes catSnooze {
+    from { transform: rotate(-5deg) scale(0.95); }
+    to { transform: rotate(5deg) scale(1.05); }
+}
+
+.waiting-cat-text {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin: 0;
+    font-style: italic;
+}
+
+/* Responsive Countdown */
+@media (max-width: 650px) {
+    .countdown-hero-card {
+        padding: 32px 18px;
+    }
+
+    .countdown-hero-title {
+        font-size: 1.8rem;
+    }
+
+    .countdown-hero-subtitle {
+        font-size: 0.92rem;
+        margin-bottom: 24px;
+    }
+
+    .countdown-digits-row {
+        gap: 8px;
+        margin-bottom: 24px;
+    }
+
+    .countdown-digit-card {
+        min-width: 85px;
+        height: 100px;
+        border-radius: 16px;
+    }
+
+    .digit-value {
+        font-size: 2.6rem;
+    }
+
+    .digit-label {
+        font-size: 0.62rem;
+        letter-spacing: 1.5px;
+    }
+
+    .digit-divider {
+        font-size: 2rem;
+    }
+
+    .countdown-waiting-scene {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+        padding: 14px;
+    }
+}
+

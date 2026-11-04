@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="birthday.css">
 </head>
 <body>
 
@@ -21,16 +22,13 @@
         <!-- ======== SIDEBAR ======== -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="brand">
-                    <div class="brand-icon brand-cat-ears">
-                        <!-- Brain / Psychology icon -->
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M13 3C9.23 3 6.19 5.95 6 9.66L4.08 12.19C3.84 12.5 4.08 13 4.5 13H6V16C6 17.11 6.89 18 8 18H9V21H16V16.31C18.37 15.19 20 12.8 20 10C20 6.13 16.87 3 13 3ZM11 11.5C11 10.67 11.67 10 12.5 10C13.33 10 14 10.67 14 11.5C11.67 13 11 12.33 11 11.5ZM14 9C13.45 9 13 8.55 13 8C13 7.45 13.45 7 14 7C14.55 7 15 7.45 15 8C15 8.55 14.55 9 14 9Z"/>
-                        </svg>
+                <div class="sidebar-brand-area">
+                    <div class="brand">
+                        <img src="images.jpg" alt="Logo de gato" class="brand-image" style="width: 56px; height: 56px; border-radius: 14px; object-fit: cover; box-shadow: 0 4px 10px var(--shadow-color);">
+                        <h1>DSM-5 🐾</h1>
                     </div>
-                    <h1>DSM-5 🐾</h1>
+                    <p class="subtitle">Manual Diagnóstico & Estadístico</p>
                 </div>
-                <p class="subtitle">Manual Diagnóstico & Estadístico</p>
 
                 <div class="filter-pills" id="filterPills">
                     <button class="pill active" data-filter="all">Todos</button>
@@ -75,7 +73,10 @@
             <!-- Welcome State -->
             <div id="welcomeScreen" class="welcome-screen">
                 <div class="welcome-card glass-panel">
-                    <span class="welcome-emoji">🧠✨</span>
+                    <div class="welcome-emoji" style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 16px;">
+                        <img src="images (1).jpg" alt="Cerebro" style="width: 72px; height: 72px; object-fit: cover; border-radius: 18px; box-shadow: 0 4px 10px var(--shadow-color);">
+                        <span style="font-size: 4rem; line-height: 1;">✨</span>
+                    </div>
                     <h2>¡Bienvenida al DSM-5 Interactivo!</h2>
                     <p>Explora la clasificación completa del manual, sus <strong>criterios diagnósticos</strong>, la sección de <strong>diagnóstico diferencial</strong> para comparar trastornos similares, y el <strong>glosario clínico</strong>.</p>
                     <div class="welcome-hint">
@@ -146,5 +147,7 @@
     <script src="data.js"></script>
     <script src="app.js"></script>
     <script src="cats.js"></script>
+    <script src="chat.js"></script>
+    <script src="birthday.js"></script>
 </body>
 </html>
